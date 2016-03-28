@@ -35,5 +35,5 @@ type IStudent interface {
 
 func main() {
 
-	test_time()
+	test_http2()
 }

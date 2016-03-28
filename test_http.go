@@ -8,11 +8,35 @@ import (
 	"net/http"
 )
 
-var addr = flag.String("addr", ":1718", "http service address") // Q=17, R=18
+//sample2
+func test_http2() {
+	hadler := &HttpHandler{}
+	http.ListenAndServe(":8888", hadler)
+}
 
-var templ = template.Must(template.New("qr").Parse(templateStr))
+type HttpHandler struct {
+}
 
-func test_webserver() {
+func (this *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("<h1>在 ServeHTTP 里</h1>"))
+	w.Write([]byte(r.URL.Path))
+}
+
+//sample1
+func test_http1() {
+	http.HandleFunc("/test", HandleRequest)
+	http.ListenAndServe(":8888", nil)
+}
+func HandleRequest(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("<h1>第一个 WEB 应用</h1>"))
+	w.Write([]byte(r.URL.Path))
+}
+
+//sample3: a simple QR server
+func test_QRserver() {
+	var addr = flag.String("addr", ":1718", "http service address") // Q=17, R=18
+	var templ = template.Must(template.New("qr").Parse(templateStr))
+
 	flag.Parse()
 	http.Handle("/", http.HandlerFunc(QR))
 	err := http.ListenAndServe(*addr, nil)
