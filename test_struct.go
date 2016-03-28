@@ -29,46 +29,6 @@ func test_slice() {
 	fmt.Println(arr5)
 }
 
-//Test of struct,inherit,interface
-type Student struct {
-	Name  string
-	Age   int
-	class string
-}
-
-func (this Student) getName() string {
-	return this.Name
-}
-func (this *Student) setName(name string) {
-	this.Name = name
-}
-func (this *Student) getAge() int {
-	return this.Age
-}
-func (this *Student) setAge(age int) {
-	this.Age = age
-}
-func (this *Student) Display() {
-	fmt.Println(this.Name, ",", this.Age)
-}
-
-type CollegeStudent struct {
-	Student
-	Profession string
-}
-
-type IStudent interface {
-	GetName() string
-	GetAge() int
-}
-
-func (this *Student) GetName() string {
-	return this.Name
-}
-func (this *Student) GetAge() int {
-	return this.Age
-}
-
 func test_struct() {
 
 	var si IStudent = &Student{"李四abcv", 23, "2004(2)班"}
