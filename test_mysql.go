@@ -9,6 +9,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+func test_sqlite() {
+
+}
+
 /***
 通情况下我们用 Query,或 Exec 就可以了。
 但对行重复性的操，比如，循环向数据库中插入 10000 条数据，这时就要用 Prepare 了，可

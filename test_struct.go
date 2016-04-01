@@ -2,7 +2,16 @@ package main
 
 import "fmt"
 
-//Test of slice
+func test_map() {
+	mp := make(map[string]string) //key 是字符串类型，值也是字符串类型
+	mp["a"] = "1"
+	mp["b"] = "2"
+	mp["pi"] = "3.1415926"
+	mp["sh"] = "上海"
+	for k, v := range mp {
+		fmt.Println(k, "=", v)
+	}
+}
 func test_slice() {
 	//声明一个2个元素的数组，名字为 arr_1,因为是 int 型数组，所以初值为0，即[0,0]
 	var arr_1 [2]int

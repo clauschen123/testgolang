@@ -2,12 +2,58 @@ package main
 
 import (
 	"encoding/gob"
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"os"
 )
 
-func test_serilize_xml() {
+//成员变量必须大写，否则UnMarshal后没写进去
+//改成tag名怎么不行
+type ZoneInfo struct {
+	Zone  uint16 `zone`
+	Total string `total`
+}
+
+func test_json() {
+	s := &Student{Name: "张三", Age: 19}
+	//将 s 编码为 json
+	buf, err := json.Marshal(s)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	fmt.Println(string(buf))
+	//将 json 字符串转换成 Student 对像
+	var s1 Student
+	json.Unmarshal(buf, &s1)
+	fmt.Println(s1)
+
+	b := []byte(`{"Name":"Wednesday","Age":6,"Parents":["Gomez","Morticia"]}`)
+	b = []byte(`{
+			"zone" : 37,
+			"uid" : "166633186212710420",
+			"add" : true,
+			"total" : "1"
+			}`)
+	var f interface{}
+	err = json.Unmarshal(b, &f)
+	fmt.Println(f)
+
+	fmt.Println("....................")
+	b1 := []byte(`{
+			"zone" : 37,
+			"uid" : "166633186212710420",
+			"add" : true,
+			"total" : "1"
+			}`)
+	var zi ZoneInfo
+	err = json.Unmarshal(b1, &zi)
+	fmt.Println(zi)
+
+}
+
+func test_xml() {
 	f, err := os.Create("data.txt")
 	if err != nil {
 		fmt.Println(err.Error())

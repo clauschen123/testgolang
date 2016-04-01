@@ -23,7 +23,7 @@ func test_tag() {
 }
 
 //call fucn
-func test_call() {
+func test_reflect_call() {
 	s := Student{Name: "abc", Age: 19}
 	rt := reflect.TypeOf(&s)
 	rv := reflect.ValueOf(&s)

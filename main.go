@@ -2,11 +2,17 @@ package main
 
 import "fmt"
 
-//Test of struct,inherit,interface
+func main() {
+	//	fmt.Println("called by go")
+	//	var str string
+	//	fmt.Scan(&str)
+	test_http1()
+}
 
+//public struct
 type Student struct {
-	Name  string `学生姓名`
-	Age   int    `a:"1111 "b:"3333"` //这个不是单引号，而是~键上的符号
+	Name  string //`学生姓名`
+	Age   int    //`a:"1111 "b:"3333"` //这个不是单引号，而是~键上的符号
 	class string
 }
 
@@ -31,9 +37,4 @@ type CollegeStudent struct {
 type IStudent interface {
 	GetName() string
 	GetAge() int
-}
-
-func main() {
-
-	test_http2()
 }
