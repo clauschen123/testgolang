@@ -1,14 +1,51 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os/exec"
 	"time"
 )
 
+func run3() {
+	cmd := exec.Command("echo", "-n", `{"Name": "Bob", "Age": 32}`)
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := cmd.Start(); err != nil {
+		log.Fatal(err)
+	}
+	var person struct {
+		Name string
+		Age  int
+	}
+	if err := json.NewDecoder(stdout).Decode(&person); err != nil {
+		log.Fatal(err)
+	}
+	if err := cmd.Wait(); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s is %d years old\n", person.Name, person.Age)
+}
+
+//execute a shell file
+func run2() {
+	cmd := exec.Command("/bin/sh", "./exec.sh")
+
+	bytes, err := cmd.Output()
+	if err != nil {
+		fmt.Println("cmd.Output: ", err)
+		return
+	}
+
+	fmt.Println(string(bytes))
+}
+
 func run() {
-	cmd := exec.Command("/bin/sh", "-c", "ping 127.0.0.1")
+	cmd := exec.Command("cmd.exe", "-c", "ping 127.0.0.1")
 	_, err := cmd.Output()
 	if err != nil {
 		panic(err.Error())
@@ -24,6 +61,9 @@ func run() {
 }
 
 func test_shell() {
+	run3()
+	return
+
 	go run()
 	time.Sleep(1e9)
 
