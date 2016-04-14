@@ -8,10 +8,69 @@ import (
 	"os"
 )
 
+//test_json3: json2map
+//把请求包定义成一个结构体
+type Requestbody struct {
+	req string
+}
+
+//以指针的方式传入，但在使用时却可以不用关心,result 是函数内的临时变量，作为返回值可以直接返回调用层
+func (r *Requestbody) Json2map() (s map[string]interface{}, err error) {
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(r.req), &result); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func test_json3() {
+	//json转map
+	var r Requestbody
+	r.req = `{"name": "xym","sex": "male"}`
+	if req2map, err := r.Json2map(); err == nil {
+		fmt.Println(req2map["name"])
+		fmt.Println(req2map)
+	} else {
+		fmt.Println(err)
+	}
+}
+
+//test_json2: map2json
+type ChannelOperator struct {
+	Oid      string
+	Aid      string
+	Name     string
+	Isonline bool
+	//	Msgchan  chan string `json:"-"`
+}
+
+type ChannelOperators struct {
+	Op []ChannelOperator
+}
+
+func test_json2() {
+	fmt.Println("Hello, map2json")
+	mm := make(map[string]*ChannelOperator)
+	mm["123"] = &ChannelOperator{Oid: "12312"}
+	mm["5678"] = &ChannelOperator{Oid: "12312"}
+
+	b, _ := json.Marshal(mm)
+	fmt.Println(string(b))
+
+	c := ChannelOperators{}
+	c.Op = append(c.Op, ChannelOperator{Oid: "12312"})
+
+	x, err := json.Marshal(c)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(x))
+}
+
 //成员变量必须大写，否则UnMarshal后没写进去
 //改成tag名怎么不行
 type ZoneInfo struct {
-	Zone  uint16 `zone`
+	Zone  string `zone`
 	Total string `total`
 }
 

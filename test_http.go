@@ -84,15 +84,19 @@ func test_http1() {
 }
 
 var (
-	s_zoneInfo map[uint16]ZoneInfo = make(map[uint16]ZoneInfo)
+	g_ZI map[float32]ZoneInfo = make(map[float32]ZoneInfo)
 )
 
 func HandleRequest101(w http.ResponseWriter, r *http.Request) {
-	buf, err := json.Marshal(s_zoneInfo)
+	g_ZI[1] = ZoneInfo{"1", "zone1"}
+	g_ZI[2] = ZoneInfo{"2", "zone2"}
+
+	buf, err := json.Marshal(g_ZI)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
+	fmt.Println(string(buf))
 	w.Write(buf)
 }
 
@@ -107,7 +111,8 @@ func HandleRequest100(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Unmarshal result:", err)
 		}
 	}
-	s_zoneInfo[zi.Zone] = zi
+	//g_ZI[zi.Zone] = zi
+	g_ZI[1] = zi
 
 	w.Write([]byte("SUCC"))
 }
