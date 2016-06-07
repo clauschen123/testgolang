@@ -8,9 +8,10 @@ func main() {
 	//	fmt.Println("called by go")
 	//	var str string
 	//	fmt.Scan(&str)
-	test_shell()
+	test_base()
 }
 
+//---------------------- test struct ----------------------
 //public struct
 type Student struct {
 	Name  string //`学生姓名`
