@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 //sample3: file upload
@@ -80,24 +81,78 @@ func test_http1() {
 	http.HandleFunc("/test6", HandleRequest6)
 	http.HandleFunc("/test100", HandleRequest100)
 	http.HandleFunc("/test101", HandleRequest101)
-	http.ListenAndServe(":8888", nil)
+	http.ListenAndServe(":8881", nil)
+}
+
+////////////////////////////////////////////
+// 统计全区人数
+////////////////////////////////////////////
+type zone_report_t struct {
+	Zone  int `zone`
+	Count int `count`
 }
 
 var (
-	g_ZI map[float32]ZoneInfo = make(map[float32]ZoneInfo)
+	zone_report map[int]zone_report_t = make(map[int]zone_report_t)
 )
 
-func HandleRequest101(w http.ResponseWriter, r *http.Request) {
-	g_ZI[1] = ZoneInfo{"1", "zone1"}
-	g_ZI[2] = ZoneInfo{"2", "zone2"}
+func main_statistic() {
+	http.HandleFunc("/report", ReportHandler)
+	http.HandleFunc("/query", QueryHandler)
+	http.ListenAndServe(":8881", nil)
+}
 
-	buf, err := json.Marshal(g_ZI)
+func ReportHandler(w http.ResponseWriter, r *http.Request) {
+
+	data := r.URL.Query()
+
+	sid, err := strconv.Atoi(data.Get("sid"))
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("sid fail")
+		w.Write([]byte("Sid fail"))
 		return
 	}
-	fmt.Println(string(buf))
-	w.Write(buf)
+
+	count, err := strconv.Atoi(data.Get("count"))
+	if err != nil {
+		fmt.Println("count fail")
+		w.Write([]byte("Count fail"))
+		return
+	}
+
+	fmt.Println(data)
+	fmt.Println(sid)
+	fmt.Println(count)
+
+	zone_report[sid] = zone_report_t{sid, count}
+
+	w.Write([]byte("SUCC"))
+}
+
+func QueryHandler(w http.ResponseWriter, r *http.Request) {
+
+	var total int = 0
+	for _, v := range zone_report {
+		total += v.Count
+	}
+	fmt.Println(total)
+
+	w.Write([]byte(strconv.Itoa(total)))
+}
+
+// End of统计全区人数
+
+func HandleRequest101(w http.ResponseWriter, r *http.Request) {
+	//	g_ZI[1] = ZoneInfo{"1", "zone1"}
+	//	g_ZI[2] = ZoneInfo{"2", "zone2"}
+
+	//	buf, err := json.Marshal(g_ZI)
+	//	if err != nil {
+	//		fmt.Println(err.Error())
+	//		return
+	//	}
+	//	fmt.Println(string(buf))
+	//	w.Write(buf)
 }
 
 func HandleRequest100(w http.ResponseWriter, r *http.Request) {
@@ -112,7 +167,7 @@ func HandleRequest100(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	//g_ZI[zi.Zone] = zi
-	g_ZI[1] = zi
+	//	g_ZI[1] = zi
 
 	w.Write([]byte("SUCC"))
 }

@@ -70,8 +70,8 @@ func test_json2() {
 //成员变量必须大写，否则UnMarshal后没写进去
 //改成tag名怎么不行
 type ZoneInfo struct {
-	Zone  string `zone`
-	Total string `total`
+	Zone  int `zone`
+	Total int `total`
 }
 
 func test_json() {
