@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/json"
+	//	"encoding/json"
 	"flag"
 	"fmt"
 	"html/template"
@@ -156,16 +156,16 @@ func HandleRequest101(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleRequest100(w http.ResponseWriter, r *http.Request) {
-	data := r.URL.Query()
+	//	data := r.URL.Query()
 
-	jsonStr := data.Get("json")
-	var zi ZoneInfo
-	if len(jsonStr) > 0 {
-		err := json.Unmarshal([]byte(jsonStr), &zi)
-		if err != nil {
-			fmt.Println("Unmarshal result:", err)
-		}
-	}
+	//	jsonStr := data.Get("json")
+	//	var zi ZoneInfo
+	//	if len(jsonStr) > 0 {
+	//		err := json.Unmarshal([]byte(jsonStr), &zi)
+	//		if err != nil {
+	//			fmt.Println("Unmarshal result:", err)
+	//		}
+	//	}
 	//g_ZI[zi.Zone] = zi
 	//	g_ZI[1] = zi
 
