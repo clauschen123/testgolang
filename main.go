@@ -4,5 +4,6 @@ func main() {
 	//	fmt.Println("called by go")
 	//	var str string
 	//	fmt.Scan(&str)
-	main_statistic()
+	online_stat()
+	//	test_interface()
 }

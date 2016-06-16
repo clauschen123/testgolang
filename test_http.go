@@ -9,9 +9,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 )
 
+//---------------------------------------
 //sample3: file upload
 func test_upload() {
 	http.HandleFunc("/", FileUpload)
@@ -83,64 +83,6 @@ func test_http1() {
 	http.HandleFunc("/test101", HandleRequest101)
 	http.ListenAndServe(":8881", nil)
 }
-
-////////////////////////////////////////////
-// 统计全区人数
-////////////////////////////////////////////
-type zone_report_t struct {
-	Zone  int `zone`
-	Count int `count`
-}
-
-var (
-	zone_report map[int]zone_report_t = make(map[int]zone_report_t)
-)
-
-func main_statistic() {
-	http.HandleFunc("/report", ReportHandler)
-	http.HandleFunc("/query", QueryHandler)
-	http.ListenAndServe(":8881", nil)
-}
-
-func ReportHandler(w http.ResponseWriter, r *http.Request) {
-
-	data := r.URL.Query()
-
-	sid, err := strconv.Atoi(data.Get("sid"))
-	if err != nil {
-		fmt.Println("sid fail")
-		w.Write([]byte("Sid fail"))
-		return
-	}
-
-	count, err := strconv.Atoi(data.Get("count"))
-	if err != nil {
-		fmt.Println("count fail")
-		w.Write([]byte("Count fail"))
-		return
-	}
-
-	fmt.Println(data)
-	fmt.Println(sid)
-	fmt.Println(count)
-
-	zone_report[sid] = zone_report_t{sid, count}
-
-	w.Write([]byte("SUCC"))
-}
-
-func QueryHandler(w http.ResponseWriter, r *http.Request) {
-
-	var total int = 0
-	for _, v := range zone_report {
-		total += v.Count
-	}
-	fmt.Println(total)
-
-	w.Write([]byte(strconv.Itoa(total)))
-}
-
-// End of统计全区人数
 
 func HandleRequest101(w http.ResponseWriter, r *http.Request) {
 	//	g_ZI[1] = ZoneInfo{"1", "zone1"}
