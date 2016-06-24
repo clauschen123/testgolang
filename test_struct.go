@@ -69,7 +69,59 @@ func test_slice() {
 	fmt.Println(arr5)
 }
 
+//test inherit
+type Idemo interface {
+	get() int
+	set(int)
+}
+type demo1 struct {
+	a int
+}
+type demo2 struct {
+	demo1
+}
+
+func (d *demo1) get() int {
+	fmt.Println("demo1 get")
+	return d.a
+}
+func (d *demo1) set(b int) {
+	fmt.Println("demo1 set")
+	d.a = b
+}
+
+func (d *demo2) set(b int) {
+	fmt.Println("demo2 set")
+	d.a = b
+}
+
+//func (d *demo2) get() int {
+//	return d.d1.get()
+//}
+
+func test1(d Idemo) int {
+	return d.get()
+}
+func test_herit() {
+	d2 := demo2{demo1{10}}
+	var idemo Idemo = &d2
+	idemo.set(88)
+	fmt.Println(idemo.get())
+
+	d1 := demo1{100}
+
+	fmt.Println(d1.get())
+	//	fmt.Println(test1(d1)) //func (d *demo1) get() int : compile error
+
+	fmt.Println(d2.get())
+	//	fmt.Println(test1(d2))
+
+	fmt.Println("Test demo end...")
+}
+
 func test_struct() {
+
+	test_herit()
 
 	var si IStudent = &Student{"李四abcv", 23, "2004(2)班"}
 	fmt.Println(si.GetName())
