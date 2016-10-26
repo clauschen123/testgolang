@@ -85,6 +85,7 @@ func (d *demo1) get() int {
 	fmt.Println("demo1 get")
 	return d.a
 }
+
 func (d *demo1) set(b int) {
 	fmt.Println("demo1 set")
 	d.a = b
@@ -102,9 +103,16 @@ func (d *demo2) set(b int) {
 func test1(d Idemo) int {
 	return d.get()
 }
+
+//继承模式
 func test_herit() {
 	d2 := demo2{demo1{10}}
 	var idemo Idemo = &d2
+
+	if _, ok := idemo.(Idemo); ok {
+		fmt.Printf("value %v of type %T implements Idemo\n", idemo, idemo)
+	}
+
 	idemo.set(88)
 	fmt.Println(idemo.get())
 
@@ -151,4 +159,20 @@ func test_struct() {
 	s4.Display()
 	fmt.Println(s4.Student.Name) //可以通过 student 访问 Name
 	fmt.Println(s4.Name)
+}
+
+func test_slice2() {
+	s := []int{5}
+	s = append(s, 7)
+	s = append(s, 9)
+	x := append(s, 11)
+	y := append(s, 12)
+	fmt.Println(s, x, y)
+
+	/*
+		1. 创建s时，cap(s) == 1，内存中数据[5]
+		2. append(s, 7) 时，按Slice扩容机制，cap(s)翻倍 == 2，内存中数据[5,7]
+		3. append(s, 9) 时，按Slice扩容机制，cap(s)再翻倍 == 4，内存中数据[5,7,9]，但是实际内存块容量4
+		4. x := append(s, 11) 时，容量足够不需要扩容，内存中数据[5,7,9,11]5. y := append(s, 12) 时，容量足够不需要扩容，内存中数据[5,7,9,12]
+	*/
 }
