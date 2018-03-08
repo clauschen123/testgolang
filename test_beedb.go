@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beedb"
-	_ "github.com/ziutek/mymysql/godrv"
+	//	_ "github.com/ziutek/mymysql/godrv"
 )
 
 type Userinfo struct {

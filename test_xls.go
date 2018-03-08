@@ -22,7 +22,7 @@ func read_xls() {
 	for _, sheet := range xlFile.Sheets {
 		for _, row := range sheet.Rows {
 			for _, cell := range row.Cells {
-				value, _ := cell.String()
+				value := cell.String()
 				fmt.Printf("%s\n", value)
 			}
 		}

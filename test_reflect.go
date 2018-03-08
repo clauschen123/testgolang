@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 )
 
@@ -54,12 +55,13 @@ func ShowSlice(s []reflect.Value) {
 }
 func test_reflect() {
 
-	test_tag()
-	return
-
 	s := Student{Name: "abc", Age: 19}
+
 	rt := reflect.TypeOf(s)
+	fmt.Printf("rt : %T\n", rt)
+
 	newrt := reflect.TypeOf(rt)
+	fmt.Printf("newrt : %T\n", newrt)
 
 	//判断是否指针类型，如果是，取指针所指向的元素的类型
 	if rt.Kind() == reflect.Ptr {
@@ -107,6 +109,7 @@ func test_reflect() {
 		}
 	}
 
+	fmt.Println("Now is refect.valueOf")
 	//TypeOf 只能取到字段名，字段类型，取不到字段值；要取字段值，需要用 ValueOf。
 	rv := reflect.ValueOf(s)
 	//判断是否指针类型，如果是，取指针所指向的元素的类型
@@ -114,6 +117,7 @@ func test_reflect() {
 		rv = rv.Elem()
 	}
 	rvField := rv.FieldByName("Name") //取 Name 字段的值
+	fmt.Println(rvField.Interface())
 	fmt.Println(rvField.String())
 
 	rvField = rv.FieldByName("Age") //取 Age 字段的值
@@ -137,11 +141,13 @@ func test_reflect() {
 
 // reflect.Select
 func test_reflect2() {
-	var sendCh = make(chan int) // channel to use (for send or receive)
-
-	var increaseInt = func(c chan int) {
+	var sendCh = make(chan Student, 4) // channel to use (for send or receive)
+	var user = os.Getenv("USER")
+	fmt.Println(user)
+	var increaseInt = func(c chan Student) {
 		for i := 0; i < 8; i++ {
-			c <- i
+			c <- Student{Age: i}
+			fmt.Println("send to channel:", i)
 		}
 		close(c)
 	}
@@ -156,7 +162,7 @@ func test_reflect2() {
 	for counter < 1 {
 		chosen, recv, recvOk := reflect.Select(selectCase) // <--- here
 		if recvOk {
-			fmt.Println(chosen, recv.Int(), recvOk)
+			fmt.Println(chosen, recv.Interface(), recvOk)
 
 		} else {
 			counter++

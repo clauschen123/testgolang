@@ -45,7 +45,7 @@ func test() {
 }
 
 func test_routine() {
-	go test()
+	test_1()
 	var str string
 	fmt.Scan(&str)
 }

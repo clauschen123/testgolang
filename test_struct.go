@@ -96,11 +96,13 @@ func (d *demo2) set(b int) {
 	d.a = b
 }
 
-//func (d *demo2) get() int {
-//	return d.d1.get()
-//}
+func (d *demo2) get() int {
+	fmt.Println("demo2 get")
+	return d.a
+}
 
 func test1(d Idemo) int {
+	fmt.Println("call Idemo get")
 	return d.get()
 }
 
@@ -119,21 +121,18 @@ func test_herit() {
 	d1 := demo1{100}
 
 	fmt.Println(d1.get())
-	//	fmt.Println(test1(d1)) //func (d *demo1) get() int : compile error
+	fmt.Println(test1(&d1)) //func (d *demo1) get() int : compile error
 
 	fmt.Println(d2.get())
-	//	fmt.Println(test1(d2))
+	fmt.Println(test1(&d2))
 
 	fmt.Println("Test demo end...")
 }
 
 func test_struct() {
 
-	test_herit()
-
 	var si IStudent = &Student{"李四abcv", 23, "2004(2)班"}
 	fmt.Println(si.GetName())
-	return
 
 	s1 := new(Student)
 	s1.Name = "张三"
@@ -167,12 +166,34 @@ func test_slice2() {
 	s = append(s, 9)
 	x := append(s, 11)
 	y := append(s, 12)
+	s = append(s, 13)
+
+	s[0] = 500
 	fmt.Println(s, x, y)
 
 	/*
 		1. 创建s时，cap(s) == 1，内存中数据[5]
 		2. append(s, 7) 时，按Slice扩容机制，cap(s)翻倍 == 2，内存中数据[5,7]
 		3. append(s, 9) 时，按Slice扩容机制，cap(s)再翻倍 == 4，内存中数据[5,7,9]，但是实际内存块容量4
-		4. x := append(s, 11) 时，容量足够不需要扩容，内存中数据[5,7,9,11]5. y := append(s, 12) 时，容量足够不需要扩容，内存中数据[5,7,9,12]
+		4. x := append(s, 11) 时，容量足够不需要扩容，内存中数据[5,7,9,11]
+		5. y := append(s, 12) 时，容量足够不需要扩容，内存中数据[5,7,9,12]
 	*/
+}
+func test_slice3() {
+	var s []int
+	for i := 1; i <= 3; i++ {
+		s = append(s, i)
+	}
+	reverse(s)
+	fmt.Println(s)
+}
+
+func reverse(s []int) {
+	s = append(s, 999)
+	s = append(s, 1000)
+	for i, j := 0, len(s)-1; i < j; i++ {
+		j = len(s) - (i + 1)
+		s[i], s[j] = s[j], s[i]
+		fmt.Println(i)
+	}
 }
